@@ -1,0 +1,38 @@
+    <ion-side-menus>
+      <ion-side-menu-content>
+        <ion-header-bar class="bar-dark">
+          <button class="button button-icon" ng-click="toggleProjects()">
+            <i class="icon ion-navicon"></i>
+          </button>
+          <h1 class="title" ng-click="showActions()">{{activeProject.title}}</h1>
+      <!-- New Task button-->
+          <button class="button button-icon" ng-click="newTask()">
+            <i class="icon ion-compose"></i>
+          </button>          
+        </ion-header-bar>      
+        <ion-content>
+          <ion-list>
+            <ion-item class="item item-icon-right" ng-repeat="task in activeProject.tasks">
+              <ion-checkbox class="item-text-wrap" style="border:none;" ng-model="task.isDone"  ng-model="task.isDone" ng-click="doneClicked($index, task)" ng-true-value="'YES'" ng-false-value="'NO'"><span>{{task.title}}</span></ion-checkbox>
+              <i class="icon ion-edit" ng-click="editTask($index, task)"></i>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-side-menu-content>
+      <ion-side-menu side="left">
+        <ion-header-bar class="bar-dark">
+          <h1 class="title">Projects</h1>
+          <button class="button button-icon ion-plus" ng-click="newProject()">
+          </button>
+        </ion-header-bar>
+        <ion-content scroll="false">
+          <ion-list>
+            <ion-item class="item item-icon-right" ng-repeat="project in projects" ng-class="{active: activeProject == project}">
+              <i class="icon ion-edit" ng-click="editProject($index, project)"></i>
+              <span ng-click="selectProject(project, $index)">{{project.title}}</span>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ion-side-menu>
+
+    </ion-side-menus>

@@ -15,12 +15,14 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
    <script src="js/app.js"></script>
+   <script src="js/services.js"></script>
+   <script src="js/controllers.js"></script>
  
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
   </head>
-  <body ng-app="todo" ng-controller="TodoCtrl"> 
+  <body ng-app="todo" ng-controller="todoCtrl"> 
     <ion-side-menus>
       <ion-side-menu-content>
         <ion-header-bar class="bar-dark">
@@ -36,43 +38,8 @@
         <ion-content>
           <ion-list>
             <ion-item class="item item-icon-right" ng-repeat="task in activeProject.tasks">
-
-<!--
-               <label class="checkbox">
-                <span class="input-label">{{task.title}}</span>
-                <input type="checkbox" ng-model="task.isDone" ng-true-value="'YES'" ng-false-value="'NO'" ng-change="toggleDone($index, task)">
-              </label>
- -->
-
-<!--  
-              <label class="checkbox">
-                <input type="checkbox" ng-model="task.isDone" ng-true-value="'YES'" ng-false-value="'NO'" ng-change="toggleDone($index, task)">
-              </label>
-              {{task.title}}
- -->
-<!-- 
-              <i class="icon ion-ios7-circle-outline " ng-hide="task.isDone=='YES'" ng-click="toggleDone($index, task)"></i>
-              <i class="icon ion-checkmark-circled" ng-show="task.isDone=='YES'" ng-click="toggleDone($index, task)"></i>
-              <span  ng-click="toggleDone($index, task)">{{task.title}}</span>
- -->
-<!-- 
-<div ng-click="toggleDone($index, task)">
-              <i class="icon ion-ios7-circle-outline " ng-hide="task.isDone=='YES'"></i>
-              <i class="icon ion-checkmark-circled" ng-show="task.isDone=='YES'" "></i>
-              <span >{{task.title}}</span>
-</div>
- -->
- 
           <ion-checkbox class="item-text-wrap" style="border:none;" ng-model="task.isDone"  ng-model="task.isDone" ng-click="doneClicked($index, task)" ng-true-value="'YES'" ng-false-value="'NO'"><span>{{task.title}}</span></ion-checkbox>
-
-
                 <i class="icon ion-edit" ng-click="editTask($index, task)"></i>
-<!--
-                 <button class="button" ng-click="editTask($index, task)">
-                <i class="icon ion-edit"></i>
-              </button>
- -->
-
             </ion-item>
           </ion-list>
         </ion-content>
@@ -91,69 +58,7 @@
           </ion-list>
         </ion-content>
       </ion-side-menu>
-
-<script id="new-task.html" type="text/ng-template">
-
-  <div class="modal">
-
-    <!-- Modal header bar -->
-    <ion-header-bar class="bar-secondary">
-      <h1 class="title">New Task</h1>
-      <button class="button button-clear button-positive" ng-click="closeNewTask()">Cancel</button>
-    </ion-header-bar>
-
-    <!-- Modal content area -->
-    <ion-content>
-
-      <form ng-submit="createTask(task)">
-        <div class="list">
-          <label class="item item-input">
-            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
-          </label>
-        </div>
-        <div class="padding">
-          <button type="submit" class="button button-block button-positive">Create Task</button>
-        </div>
-      </form>
-
-    </ion-content>
-
-  </div>
-</script>     
-
-<script id="edit-task.html" type="text/ng-template">
-
-  <div class="modal">
-
-    <!-- Modal header bar -->
-    <ion-header-bar class="bar-secondary">
-      <h1 class="title">Edit Task</h1>
-      <button class="button button-clear button-positive" ng-click="closeEditTask()">Cancel</button>
-    </ion-header-bar>
-
-    <!-- Modal content area -->
-    <ion-content>
-
-      <form ng-submit="updateTask(taskIndex, task)">
-        <div class="list">
-          <label class="item item-input">
-            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
-          </label>
-          <ion-checkbox ng-model="task.isDone"  ng-model="task.isDone" ng-true-value="'YES'" ng-false-value="'NO'">task is done</ion-checkbox>
-        </div>
-        <div class="padding">
-          <button type="submit" class="button button-block button-positive">Update Task</button>
-        </div>
-        <div class="padding">
-          <button t class="button button-block button-assertive" ng-click="deleteTask(taskIndex, task)">Delete Task</button>
-        </div>
-      </form>
-
-    </ion-content>
-
-  </div>
-</script> 
-
     </ion-side-menus>
   </body>
 </html>
+
