@@ -26,6 +26,9 @@ angular.module('todo.controllers', [])
   // Load or initialize projects
   $scope.projects = Projects.all();
 
+  // Grab the last active, or the first project
+  $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()];
+
   // A utility function for creating a new project
   // with the given projectTitle
   var createProject = function(projectTitle) {
@@ -34,9 +37,6 @@ angular.module('todo.controllers', [])
     Projects.save($scope.projects);
     $scope.selectProject(newProject, $scope.projects.length-1);
   };
-
-  // Grab the last active, or the first project
-  $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()];
 
   // Called to create a new project
   $scope.newProject = function() {
@@ -136,10 +136,10 @@ angular.module('todo.controllers', [])
   }
 
   // A confirm dialog
-  $scope.showConfirm = function(onYes, onNo) {
+  $scope.showConfirm = function(title, message, onYes, onNo) {
    var confirmPopup = $ionicPopup.confirm({
-     title: 'Delete Task',
-     template: 'Are you sure you want to delete this task?'
+     title: title,
+     template: message
    });
    confirmPopup.then(function(res) {
      if(res) {
@@ -157,7 +157,7 @@ angular.module('todo.controllers', [])
       return;
     }
     console.log("start deleting");
-    $scope.showConfirm(function() {
+    $scope.showConfirm('Delete Task', 'Are you sure you want to delete this task?', function() {
       console.log("confirmed to delete task "+i);
       $scope.activeProject.tasks.splice(i,1);
       Projects.save($scope.projects);
@@ -182,6 +182,20 @@ angular.module('todo.controllers', [])
   $scope.toggleProjects = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
+
+
+  // delete selected project
+  $scope.deleteProject = function(i, project) {
+    if (!$scope.activeProject || !project ) {
+      return;
+    }
+    console.log("start deleting");
+    $scope.showConfirm('Delete Project', 'Are you sure you want to delete this project?',function() {
+      console.log("confirmed to delete project and all its tasks "+i);
+      $scope.projects.splice(i,1);
+      Projects.save($scope.projects);
+    });
+  } 
 
  // Triggered on a button click, or some other target
  $scope.showActions = function() {
