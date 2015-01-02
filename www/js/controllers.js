@@ -1,6 +1,9 @@
 angular.module('todo.controllers', [])
-.controller('todoCtrl', function($scope, $ionicModal, Projects, $ionicSideMenuDelegate, $timeout, $ionicPopup, $ionicActionSheet) {
+.controller('todoCtrl', function($scope, $ionicModal, Projects, 
+  $ionicSideMenuDelegate, $timeout, $ionicPopup, $filter, $ionicActionSheet) {
  
+  var orderBy = $filter('orderBy');
+
   // Create and load the Modal for new task
   $ionicModal.fromTemplateUrl('templates/new-task.html', function(modal) {
     $scope.taskModal = modal;
@@ -29,6 +32,10 @@ angular.module('todo.controllers', [])
   // Grab the last active, or the first project
   $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()];
 
+  $scope.predicate = 'createDate';
+
+  $scope.reverse = true;
+
   // A utility function for creating a new project
   // with the given projectTitle
   var createProject = function(projectTitle) {
@@ -49,8 +56,16 @@ angular.module('todo.controllers', [])
   // Called to select the given project
   $scope.selectProject = function(project, index) {
     $scope.activeProject = project;
+    //$scope.activeProject.tasks = orderBy($scope.activeProject.tasks,$scope.predicate,$scope.reverse);
     Projects.setLastActiveIndex(index);
     $ionicSideMenuDelegate.toggleLeft(false);
+  };
+
+  // Called to select the given project
+  $scope.orderProjectTasks = function(project) {
+    console.log('ordering project tasks', project.tasks);
+    project.tasks = orderBy(project.tasks,$scope.predicate,$scope.reverse);
+    console.log('ordered project tasks', project.tasks);
   };
 
 
@@ -80,13 +95,15 @@ angular.module('todo.controllers', [])
       return;
     }
     $scope.activeProject.tasks.push({
-      title: task.title
+      title: task.title,
+      isDone: 'NO',
+      createDate: (new Date()).toISOString()
     });
     $scope.taskModal.hide();
 
     // Inefficient, but save all the projects
+    $scope.orderProjectTasks($scope.activeProject);
     Projects.save($scope.projects);
-
     task.title = "";
   };
 
@@ -99,6 +116,7 @@ angular.module('todo.controllers', [])
     $scope.editTaskModal.hide();
 
     // Inefficient, but save all the projects
+    $scope.orderProjectTasks($scope.activeProject);
     Projects.save($scope.projects);
 
   };
@@ -111,7 +129,7 @@ angular.module('todo.controllers', [])
 
   // Open our new task modal
   $scope.editTask = function(i, task) {
-    $scope.task = {title: task.title, isDone: task.isDone};
+    $scope.task = {title: task.title, isDone: task.isDone, createDate: task.createDate};
     $scope.taskIndex = i;
     $scope.editTaskModal.show();
   };
