@@ -36,6 +36,7 @@ angular.module('todo.controllers', [])
 
   $scope.reverse = true;
 
+  
   // A utility function for creating a new project
   // with the given projectTitle
   var createProject = function(projectTitle) {
@@ -63,9 +64,7 @@ angular.module('todo.controllers', [])
 
   // Called to select the given project
   $scope.orderProjectTasks = function(project) {
-    console.log('ordering project tasks', project.tasks);
     project.tasks = orderBy(project.tasks,$scope.predicate,$scope.reverse);
-    console.log('ordered project tasks', project.tasks);
   };
 
 
@@ -95,6 +94,7 @@ angular.module('todo.controllers', [])
       return;
     }
     $scope.activeProject.tasks.push({
+      id : Projects.getNextKeyValue(),
       title: task.title,
       isDone: 'NO',
       createDate: (new Date()).toISOString()
@@ -102,24 +102,33 @@ angular.module('todo.controllers', [])
     $scope.taskModal.hide();
 
     // Inefficient, but save all the projects
-    $scope.orderProjectTasks($scope.activeProject);
+ //   $scope.orderProjectTasks($scope.activeProject);
     Projects.save($scope.projects);
     task.title = "";
   };
 
 // Called when the form is submitted
-  $scope.updateTask = function(i, task) {
+  $scope.updateTask = function(task) {
     if (!$scope.activeProject || !task) {
       return;
     }
-    $scope.activeProject.tasks[i] = task;
+    var taskIndex = $scope.findTaskIndex($scope.activeProject.tasks, task.id);
+    $scope.activeProject.tasks[taskIndex] = task;
     $scope.editTaskModal.hide();
 
     // Inefficient, but save all the projects
-    $scope.orderProjectTasks($scope.activeProject);
+//    $scope.orderProjectTasks($scope.activeProject);
     Projects.save($scope.projects);
 
   };
+
+// return index of the task with given id
+  $scope.findTaskIndex = function(tasks, id) {
+    for(var i=0;i<tasks.length;i++) {
+      if (tasks[i].id == id) return i;
+    }
+    return -1;
+  }
 
   // Open our new task modal
   $scope.newTask = function() {
@@ -128,24 +137,13 @@ angular.module('todo.controllers', [])
   };
 
   // Open our new task modal
-  $scope.editTask = function(i, task) {
-    $scope.task = {title: task.title, isDone: task.isDone, createDate: task.createDate};
-    $scope.taskIndex = i;
+  $scope.editTask = function(task) {
+    $scope.task = {title: task.title, isDone: task.isDone, createDate: task.createDate, id : task.id};
     $scope.editTaskModal.show();
   };
 
   // Make sure to persist the change after is done is toggled
-  $scope.toggleDone = function(i, task) {
-    //alert("toggle done task "+task.isDone)
-    if (!$scope.activeProject || !task) {
-      return;
-    }
-    $scope.activeProject.tasks[i].isDone = ($scope.activeProject.tasks[i].isDone=="YES")?"NO":"YES";
-    Projects.save($scope.projects);
-  }
-
-  // Make sure to persist the change after is done is toggled
-  $scope.doneClicked = function(i, task) {
+  $scope.doneClicked = function(task) {
     //alert("toggle done task "+task.isDone)
     if (!$scope.activeProject || !task) {
       return;
@@ -170,14 +168,13 @@ angular.module('todo.controllers', [])
   };
 
   // delete selected task
-  $scope.deleteTask = function(i, task) {
+  $scope.deleteTask = function(task) {
     if (!$scope.activeProject || !task ) {
       return;
     }
-    console.log("start deleting");
     $scope.showConfirm('Delete Task', 'Are you sure you want to delete this task?', function() {
-      console.log("confirmed to delete task "+i);
-      $scope.activeProject.tasks.splice(i,1);
+      var taskIndex = $scope.findTaskIndex($scope.activeProject.tasks, task.id);
+      $scope.activeProject.tasks.splice(taskIndex,1);
       Projects.save($scope.projects);
     });
   } 

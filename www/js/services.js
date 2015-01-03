@@ -29,6 +29,12 @@ angular.module('todo.services', [])
     },
     setLastActiveIndex: function(index) {
       window.localStorage['lastActiveProject'] = index;
+    },
+
+    getNextKeyValue: function() {
+      var lastKeyValue = parseInt(window.localStorage['lastKeyValue']) || 0;
+      window.localStorage['lastKeyValue'] = ++lastKeyValue;
+      return lastKeyValue;
     }
   }
 })

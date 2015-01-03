@@ -9,7 +9,7 @@
     <!-- Modal content area -->
     <ion-content>
 
-      <form ng-submit="updateTask(taskIndex, task)">
+      <form ng-submit="updateTask(task)">
         <div class="list">
           <label class="item item-input">
             <input type="text" placeholder="What do you need to do?" ng-model="task.title">
@@ -20,7 +20,7 @@
           <button type="submit" class="button button-block button-positive">Update Task</button>
         </div>
         <div class="padding">
-          <button t class="button button-block button-assertive" ng-click="deleteTask(taskIndex, task)">Delete Task</button>
+          <button t class="button button-block button-assertive" ng-click="deleteTask(task)">Delete Task</button>
         </div>
       </form>
 
