@@ -1,0 +1,20 @@
+{
+  "name": "needme",
+  "app_id": "7b0a339f",
+  "proxies": [
+    {
+      "path": "/debug",
+      "proxyUrl": "https://maps.googleapis.com"
+    }
+  ],
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic1",
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
+}

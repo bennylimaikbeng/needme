@@ -1,0 +1,35 @@
+
+<div class="modal animated bounceInDown">
+
+    <ion-header-bar class="bar-secondary bar-positive">
+      <button id="createproject" class="button button-clear white icon ion-chevron-left" ng-click="createCustomProject(projects.title)">Save</button>
+      <h1 class="title">New Folder</h1>
+      <button class="button button-clear white" ng-click="closeNewProject()">Cancel</button>
+    </ion-header-bar>
+
+    <ion-content ng-swipe-right="createCustomProject(projects.title)">
+      <div class="padding2 slighttransparent" style="text-align:left">
+        <div><textarea msd-elastic="\n" rows="1" ng-model="projects.title" placeholder="Type my folder name"></textarea></div>
+      </div>
+<!--           <div class="padding2 slighttransparent">
+            <div>
+              <pre class="greyvisible">Kickstart with built-in templates</pre>
+              <ion-list>
+                <ion-item class="item" style="border-style:none; margin-right:15px; margin-top: 15px; padding:5px 0px 5px 0px; display:inline-block; border-radius:5px;" ng-click="selectProjectTemplate('Blank Folder', 'blank', '')">
+                  <span ng-class="{bold: projectTemplate=='Blank Folder'}" style="border-style:none; padding:5px; border-radius:5px; width: 100px; max-width:400px; background:#e6e6e6">Blank Folder</span>
+                </ion-item>
+                <ion-item class="item" style="border-style:none; margin-right:15px; margin-top: 15px; padding:5px 0px 5px 0px; display:inline-block" ng-click="toggleTemplateWindow()">
+                  <span style="border-style:none; padding:5px; border-radius:5px; width: 100px; max-width:400px; background:#e6e6e6"> ... </span>
+                </ion-item>                
+              </ion-list>              
+              
+              <ion-list ng-show="showTemplateWindow">
+                <ion-item ng-repeat="customProject in customProjects" class="item" style="border-style:none; margin-right:15px; margin-top: 5px; padding:5px 0px 5px 0px; display:inline-block" ng-click="selectProjectTemplate(customProject.project, customProject.category, customProject.code)">
+                  <span ng-class="{bold: customProject.project==projectTemplate}" style="border-style:none; padding:5px; border-radius:5px; min-width: 100px; max-width:400px; background:#e6e6e6">{{customProject.project}}</span>
+                </ion-item>
+              </ion-list>
+            </div> 
+          </div> -->
+    </ion-content>   
+
+</div>

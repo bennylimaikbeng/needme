@@ -1,40 +1,166 @@
-    <ion-side-menus>
-      <ion-side-menu-content>
-        <ion-header-bar class="bar-dark">
-          <button class="button button-icon" ng-click="toggleProjects()">
-            <i class="icon ion-navicon"></i>
-          </button>
-          <h1 class="title" ng-click="showActions()">{{activeProject.title}}</h1>
-      <!-- New Task button-->
-          <button class="button button-icon" ng-click="newTask()">
-            <i class="icon ion-compose"></i>
-          </button>          
-        </ion-header-bar>      
-        <ion-content>
-<!--           <ion-list show-delete="true" show-reorder="true">
- -->    
-          <ion-list>
-            <ion-item class="item item-icon-right" ng-repeat="task in activeProject.tasks | orderBy : predicate: reverse">
-              <ion-checkbox ng-class="{complete: task.isDone == 'YES'}" class="item-text-wrap" style="border:none;" ng-model="task.isDone"  ng-model="task.isDone" ng-click="doneClicked(task)" ng-true-value="'YES'" ng-false-value="'NO' "><span>{{task.title}}</span></ion-checkbox>
-                <i class="icon ion-edit" ng-click="editTask(task)" ></i>
-            </ion-item>
-          </ion-list>
-        </ion-content>
-      </ion-side-menu-content>
-      <ion-side-menu side="left">
-        <ion-header-bar class="bar-dark">
-          <h1 class="title">Projects</h1>
-          <button class="button button-icon ion-plus" ng-click="newProject()">
-          </button>
-        </ion-header-bar>
-        <ion-content scroll="false">
-          <ion-list>
-            <ion-item class="item item-icon-right" ng-repeat="project in projects" ng-class="{active: activeProject == project}">
-              <i class="icon ion-edit" ng-click="editProject($index, project)"></i>
-              <span ng-click="selectProject(project, $index)">{{project.title}}</span>
-            </ion-item>
-          </ion-list>
-        </ion-content>
-      </ion-side-menu>
+<ion-side-menus>
+  <ion-side-menu-content drag-content="false">
+    <ion-header-bar class="row bar-positive">
+      <span class="col-33 button button-clear icon ion-ios-bookmarks-outline" style="text-align: left !important" ng-click="toggleProjects()">
+      </span>
+      <span class="col-33 button button-clear truncate" style="font-size:90%" ng-class="{displaynone: currentTabIndex == '0'}">
+        <i>{{activeProject.title}}</i>
+      </span>
+      <span class="col-33" style="text-align: right !important" ng-class="{displaynone: currentTabIndex != '1'}">
+        <i class="button button-clear icon ion-ios-plus-outline" ng-click="newTask()"><span style="font-size:12px">Note</span></i>
+        <i class="button button-clear icon ion-ios-more-outline" ng-click="toggleMoreProperties()"></i>
+      </span>
+      <span class="col-66" style="text-align: right !important" ng-class="{displaynone: currentTabIndex != '0'}">
+        <i class="button button-clear icon ion-ios-plus-outline" ng-click="newProject()"><span style="font-size:12px">Folder</span></i>
+        <i class="button button-clear icon ion-ios-search-strong" ng-click="openSearch()"></i>
+      </span>   
+      <span class="col-33" style="text-align: right !important" ng-class="{displaynone: currentTabIndex != '3'}">
+        <i class="button button-clear icon ion-trash-b" ng-click="deleteProject(myLastActiveIndex)"></i>
+      </span>
+    </ion-header-bar>
 
-    </ion-side-menus>
+    <ion-tabs class="tabs-positive tabs-icon-top">  
+      <ion-tab title="Folders" icon-on="ion-ios-briefcase" icon-off="ion-ios-briefcase-outline" badge="projects.length || '0'" badge-style="badge-royal" ng-click="swipeToNextTab(0)">
+        <ion-view>
+          <ion-content delegate-handle=".cardmenuproject" scroll="true" has-bouncing="true" ng-swipe-left="swipeToNextTab(1)" ng-swipe-right="toggleProjects()" class="animated fadeIn" style="background: url(img/{{themeString}}.jpg);background-size: cover; position: fixed; background-repeat: no-repeat; background-position:center;">
+            <ion-list sortable draggable=".cardmenuproject" sorted="onReorderProject($fromIndex, $toIndex)">
+              <ion-item class="item item-text-wrap cardmenuproject slighttransparent" ng-repeat="project in projects" ng-class="{active: $index === myLastActiveIndex}" ng-click="selectProject($index)">
+                {{project.title}}
+                <i class="badge badge-assertive">{{(project.tasks | filter: {isDone: 'NO'}).length}}</i>
+              </ion-item>
+            </ion-list>
+            <!-- <div style="height: 50px"></div> -->
+          </ion-content>
+        </ion-view>
+      </ion-tab>    
+
+      <ion-tab title="Notes" icon-on="ion-ios-paper" icon-off="ion-ios-paper-outline" badge="(activeProject.tasks | filter: {isDone: 'NO'}).length || '0'" badge-style="badge-assertive" ng-click="selectProject(myLastActiveIndex)">
+        <ion-view>
+          <ion-content delegate-handle=".insetprojecttask" has-bouncing="true" style="background: url(img/{{themeString}}.jpg);background-size: cover; position: fixed; background-repeat: no-repeat; background-position:center;" ng-swipe-left="swipeToNextTab(2)" ng-swipe-right="swipeToNextTab(0)" class="animated fadeIn">
+            <ion-list sortable draggable=".insetprojecttask" sorted="onReorder($fromIndex, $toIndex)">
+              <ion-item class="slighttransparent" style="text-align:right;" ng-class="{displaynone:activeProject.category!=='subtotal'}">Total: {{getTotal()}}</ion-item>
+              <ion-item ng-class="{displaynone: !suggestionMessage}" class="item-text-wrap animated rubberBand">{{suggestionMessage}}</ion-item>
+              <ion-item class="item insetprojecttask slighttransparent" ng-repeat="task in activeProject.tasks | limitTo:notDoneLimit" ng-if="task.isDone == 'NO'"> 
+                <!-- Basic Mode -->
+                <div ng-class="{complete: task.isDone !== 'NO'}" class="item-text-wrap" ng-click="editTask(task,'', myLastActiveIndex)">
+                  <pre ng-class="{displaynone: !task.dueDate}" class="greyvisible ion-android-alarm-clock" style="font-size: 10px; display: inline-block;"> {{task.dueDate + ' ' + task.dueTime}}</pre> 
+                  <pre>{{task.topic ? task.topic : task.title}}</pre>
+                  <pre ng-class="{displaynone: !task.images[0].imgURI}" class="balanced ion-images" style="font-size: 16px;"></pre>
+                  <pre style="text-align:right" ng-if="activeProject.category=='subtotal'">{{task.unit * task.pricePerUnit}}</pre>
+                  <!-- http://angular-js.in/angular-contextual-date/ -->
+                </div>
+                  <div ng-if="propertiesStack" class="fade">
+                    <button class="button-icon ion-android-checkmark-circle greyvisible" ng-class="{tickcomplete: task.isDone !== 'NO', displaynone: activeProject.category=='FAQ'}" ng-click="doneClicked(task)"></button>
+                    <button class="button-icon positive ion-trash-b" ng-click="deleteTask(task)" style="margin-left:10px"></button>
+                    <button class="button-icon positive ion-edit" ng-click="editTask(task,'',myLastActiveIndex)" style="margin-left:10px"></button>
+                  </div>
+              </ion-item>
+            </ion-list>
+            <!-- <div style="height: 50px"></div> -->
+          </ion-content>
+        </ion-view>
+      </ion-tab>
+
+      <ion-tab title="Completed" icon-on="ion-android-done-all" icon-off="ion-android-done" badge="(activeProject.tasks | filter: {isDone: '!' + 'NO'}).length || '0'" badge-style="badge-balanced" ng-click="swipeToNextTab(2)">
+        <ion-view>
+          <ion-content has-bouncing="true" style="background: url(img/{{themeString}}.jpg);background-size: cover; position: fixed; background-repeat: no-repeat; background-position:center;" ng-swipe-left="swipeToNextTab(3)" ng-swipe-right="swipeToNextTab(1)" class="animated fadeIn">
+            <ion-list>
+              <ion-item class="slighttransparent" style="text-align:right;" ng-class="{displaynone:activeProject.category!=='subtotal'}">Total: {{getTotal()}}</ion-item>
+              <ion-item ng-class="{displaynone: !suggestionMessage}" class="item-text-wrap animated rubberBand">{{suggestionMessage}}</ion-item>
+              <ion-item class="item insetprojecttask slighttransparent" ng-repeat="task in activeProject.tasks | limitTo:doneLimit" ng-if="task.isDone != 'NO'"> 
+                <!-- Basic Mode -->
+                <div class="item-text-wrap" ng-click="editTask(task,'', myLastActiveIndex)">
+                  <pre class="balanced ion-android-done-all" style="font-size: 10px; display: inline-block;"> {{task.isDone | date:'EEE MMM dd yyyy hh:mm:ss a'}}</pre> 
+                  <div ng-if="activeProject.category=='FAQ' || activeProject.category=='education'">
+                    <pre style="margin-bottom: 5px"><b>{{task.topic}}</b></pre>
+                    <!-- <pre class="greyvisible" ng-class="{displaynone: task.topic.length==0}">{{task.description}}</pre> -->
+                  </div>
+                  <div ng-if="activeProject.category!=='education'">
+                    <pre>{{task.title}}</pre>
+                  </div>
+                  <pre ng-class="{displaynone: !task.images[0].imgURI}" class="balanced ion-images" style="font-size: 16px;"></pre>
+                  <pre style="text-align:right" ng-if="activeProject.category=='subtotal'">{{task.unit * task.pricePerUnit}}</pre>
+                  <!-- http://angular-js.in/angular-contextual-date/ -->
+                </div>
+              </ion-item>
+            </ion-list>
+            <!-- <div style="height: 50px"></div> -->
+          </ion-content>          
+        </ion-view>
+      </ion-tab>      
+      <ion-tab title="Properties" icon-on="ion-ios-cog" icon-off="ion-ios-cog-outline" hidden="{{propertiesHidden}}" ng-click="swipeToNextTab(3)">
+        <ion-view>
+          <ion-content ng-swipe-left="swipeToNextTab(0)" ng-swipe-right="swipeToNextTab(2)" class="animated fadeIn">
+            <div class="padding padding2">
+                <div class="greyvisible" style="text-align: left !important">Edit folder name</div>
+                <input type="text" class="textinput" ng-model="activeProject.title" placeholder="Type my folder name" ng-blur="updateProject(myLastActiveIndex)"></textarea>
+            </div>
+          </ion-content>
+        </ion-view>
+      </ion-tab>  
+    </ion-tabs>   
+
+      
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left">
+
+    <ion-header-bar class="bar-positive">
+      <button class="button button-clear" ng-click="editSetting()"><img src="img/settings.png" style="height:30px"></button>
+      <h1 class="title" style="text-align:center">Dashboard</h1>
+      <a class="button button-clear" ng-href="http://lowcost-env.gyqn3pie8x.us-west-2.elasticbeanstalk.com/infographic.html" onclick="window.open(this.href, '_blank', 'location=no'); return false;"><img src="img/helpbook.png" style="height:30px"></a>
+    </ion-header-bar>
+
+          <ion-content has-bouncing="true" scroll="true" ng-swipe-left="swipeToNextTab(1)" ng-swipe-right="toggleProjects()">      
+
+                <ion-list>              
+                  <ion-item class="active item-text-wrap" ng-click="toggleExpandReminder()">
+                    <div class="row" style="padding:0px">
+                    <span class="col-20 col-center"><img src="img/upcoming.png" style="height:30px"></span>
+                    <span class="col-80 col-center">Reminders</span>
+                    <i class="badge badge-assertive" style="top:22px">{{(upcomingList | filter: upcomingByDate).length}}</i>
+                    </div>
+                  </ion-item>
+                  <ion-item class="item item-text-wrap fade" ng-show="expandReminder" ng-if="upcomingList.length > 0">
+                    <div ng-click="openCalendar()" style="text-align: center" class="greyvisible">View in calendar</div>
+                  </ion-item>
+                  <ion-item class="item item-text-wrap fade" ng-repeat="upcoming in upcomingList | orderBy:'myAlarmTime':false | filter: upcomingByDate" ng-click="jumpToEditTask(upcoming.taskId, 'dashboard', upcoming.projectIndex)" ng-show="expandReminder" style="padding:8px">
+                    <div class="row">  
+                      <span class="col-80">
+                        <span><b>{{upcoming.projectTitle}}</b></span>
+                        <span ng-if="upcoming.taskTopic" class="lineclamp">{{upcoming.taskTopic}}</span>
+                        <span ng-if="!upcoming.taskTopic" class="lineclamp">{{upcoming.taskTitle}}</span>
+                      </span>
+                      <span class="col-20 col-center assertive" style="padding:5px; text-align:center">
+                        {{upcoming.myAlarmTime | date:'MMM dd'}}
+                      </span>
+                    </div>
+                  </ion-item>
+                </ion-list>  
+
+                <ion-list>
+                  <ion-item class="active item-text-wrap" ng-click="toggleExpandAccomplishment()">
+                    <div class="row" style="padding:0px">
+                    <span class="col-20 col-center"><img src="img/accomplishment.png" style="height:30px"></span>
+                    <span class="col-80 col-center">Completed</span>
+                    <i class="badge badge-balanced" style="top:22px">{{(accomplishmentList | filter: filterByDate).length}}</i>
+                    </div>
+                  </ion-item>
+                  <ion-item class="item item-text-wrap fade" ng-repeat="accomplishment in accomplishmentList | orderBy:'isDone':true | filter: filterByDate" ng-click="jumpToEditTask(accomplishment.taskId, 'dashboard', accomplishment.projectIndex)" ng-show="expandAccomplishment" style="padding:8px">
+                    <div class="row">
+                    <span class="col-80">
+                    <span><b>{{accomplishment.projectTitle}}</b></span>
+                    <span ng-if="accomplishment.taskTopic" class="lineclamp">{{accomplishment.taskTopic}}</span>
+                    <span ng-if="!accomplishment.taskTopic" class="lineclamp">{{accomplishment.taskTitle}}</span>
+                    </span>
+                    <span class="class-20 col-center balanced" style="padding:5px; text-align:center; border-radius: 5px; border-style: solid; border-width: 0px; width: 50px; height: 50px;">
+                      {{accomplishment.isDone | date:'MMM dd'}}
+                    </span>
+                    </div>
+                  </ion-item>  
+                </ion-list>
+          </ion-content>    
+
+  </ion-side-menu>
+
+</ion-side-menus>

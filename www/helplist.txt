@@ -1,0 +1,65 @@
+[
+  {
+    "project": "Insurance FAQ",
+    "category": "FAQ",
+    "titles": [
+      {
+        "topic": "What is my policy number?",
+        "description": "The policy number found in my insurer's policy book"
+      },
+      {
+        "topic": "What is my insurer's hotline number?",
+        "description": "Immediate contact point of the insurer when there's an urgent need for claim and emergency"
+      },
+      {
+        "topic": "What is my basic sum assured?",
+        "description": "In a life insurance policy, the insurer promises to pay the nominee a sum assured in case of the policyholder's death."
+      },
+      {
+        "topic": "What is the insurer's waiting period?",
+        "description": "The time period where insurance company will not pay for certain claims"
+      },
+      {
+        "topic": "What is the surrender value if I cancel the policy at anytime?",
+        "description": "Some policy does not provide any surrender value."
+      },
+      {
+        "topic": "What is the amount covered if I'm diagnosed with early stage cancer?",
+        "description": "The amount covered by the insurer to support my recovery from stage 1 and 2 cancer"
+      },
+      {
+        "topic": "What is the coverage given if I pass away while performing Hajj or Umrah?",
+        "description": "The amount my family would receive if I pass away while performing Hajj or Umrah"
+      }
+    ]
+  },
+  {
+    "project": "Renovation Budget",
+    "category": "subtotal",
+    "titles": [
+      {
+        "title": "Bathroom"
+      },
+      {
+        "title": "Paint"
+      },
+      {
+        "title": "Main Gate"
+      }
+    ]
+  },
+  {
+    "project": "Smart Travel",
+    "category": "FAQ",
+    "titles": [
+      {
+        "topic": "What is my passport ID?",
+        "description": "Referring electronically could save the hassle of scouring your bag for the original. Attach a screenshot is advisable"
+      },
+      {
+        "topic": "What is my country's embassy contact number?",
+        "description": "This contact number will come in handy when dealing with loss of official travel documents"
+      }
+    ]
+  }
+]

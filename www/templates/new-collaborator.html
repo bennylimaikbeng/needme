@@ -1,0 +1,35 @@
+      
+<div class="modal">
+    <ion-header-bar class="bar-secondary">
+      <i class="button button-clear button-positive icon ion-chevron-left" ng-click="closeNewCollaborator()"></i>
+      <h1 class="title">Project Email</h1>
+      <!-- <button class="button button-clear button-positive" ng-click="closeEditSetting()">Back</button> -->
+    </ion-header-bar>           
+        
+    <ion-content scroll="true">
+
+      <div class="item">
+        <span class="content">Add email manually</span>
+        <span class="content">
+        <input type="text" style="border-width:1px" id="newEmail" ng-model="newEmail" placeholder="john@gmail.com">  
+        <i class="positive" style="float: right; margin-top: 0px" ng-click="addCollaborator(newEmail)">Add</i>
+        </span>
+      </div>
+
+      <div class="item">
+        <span class="content">Search from phone contacts</span>
+        <input class="content" type="text" style="border-width:1px" ng-model="searchEmail" placeholder="Example: Benny" ng-keyup="findContactsBySearchTerm(searchEmail)">
+        <i class="positive" style="float: right; margin-top: 0px" ng-click="searchEmail=null;findContactsBySearchTerm(searchEmail)">Clear</i>
+      </div>
+        <ion-list>
+          <div  class="padding2" style="text-align:left" style="margin-top: 16px; color: #7f7f7f" ng-repeat="contact in contacts" ng-show="contact.emails.length">
+              <div ng-repeat="contactEmails in contact.emails">      
+                  <span><b>{{contact.displayName}}</b><br>{{contactEmails.value}}</span>
+                  <span ng-class="{displaynone: emailExist('{{contactEmails.value}}') == true}" class="balanced ion-plus" style="font-size:150%; margin-left: 10px" ng-click="addCollaborator('{{contactEmails.value}}')"></span>
+                  <span ng-class="{displaynone: emailExist('{{contactEmails.value}}') == false}" class="assertive ion-minus" style="font-size:150%; margin-left: 10px" ng-click="removeCollaborator('{{contactEmails.value}}')"></span>                  
+              </div>
+          </div>
+        </ion-list>
+
+    </ion-content>
+  </div>

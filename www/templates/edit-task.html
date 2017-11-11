@@ -1,29 +1,102 @@
-  <div class="modal">
+<div class="modal">
+  <!-- Modal header bar -->
+  <ion-header-bar class="bar-positive">
+    <i class="button button-clear white icon ion-chevron-left" ng-click="closeEditTask(referrer);"></i>
+    <h1 class="title">{{task.title}}</h1>
+    <i class="button button-clear white icon ion-trash-b" ng-click="deleteTask(task, referrer)"></i> 
+  </ion-header-bar>
 
-    <!-- Modal header bar -->
-    <ion-header-bar class="bar-secondary">
-      <h1 class="title">Edit Task</h1>
-      <button class="button button-clear button-positive" ng-click="closeEditTask()">Cancel</button>
-    </ion-header-bar>
-
-    <!-- Modal content area -->
-    <ion-content>
-
-      <form ng-submit="updateTask(task)">
-        <div class="list">
-          <label class="item item-input">
-            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
-          </label>
-          <ion-checkbox ng-model="task.isDone"  ng-model="task.isDone" ng-true-value="'YES'" ng-false-value="'NO'">task is done</ion-checkbox>
-        </div>
-        <div class="padding">
-          <button type="submit" class="button button-block button-positive">Update Task</button>
-        </div>
-        <div class="padding">
-          <button t class="button button-block button-assertive" ng-click="deleteTask(task)">Delete Task</button>
-        </div>
-      </form>
-
-    </ion-content>
-
+  <ion-content has-bouncing="true" ng-swipe-right="closeEditTask(referrer)" overflow-scroll="true">
+  <div class="row light blueback" style="text-align: center">
+    <span class="col">
+      <i class="clear ion-calendar" style="display:block; font-size: 25px;" ng-click="openDatePicker()"></i>
+    </span>
+    <span class="col">
+      <i class="clear ion-clock" style="display:block; font-size: 25px" ng-click="openTimePicker()"></i>
+    </span>            
+    <span ng-class="{displaynone: activeProject.category=='FAQ'}" class="col">
+      <i class="clear ion-android-checkmark-circle" style="display:block; font-size: 25px" ng-class="{tickcomplete: activeTask.isDone !== 'NO'}" ng-click="doneClicked(activeTask)"></i>
+    </span>        
+    <span class="col">
+      <i class="clear ion-images" style="display:block; font-size: 25px" ng-click="openPhotoLibrary2(task)"></i>
+    </span>    
+    <span class="col">
+      <i class="clear ion-android-camera" style="display:block; font-size: 25px" ng-click="takePicture(task)"></i>
+    </span>      
+    <span ng-class="{displaynone: activeProject.category=='education' || activeProject.category=='FAQ'}" class="col">
+      <i class="clear ion-ios-briefcase" style="display:block; font-size: 25px" ng-click="toggleTransferWindow()"></i>
+    </span>      
   </div>
+    <div class="slighttransparent" style="text-align: center;"> 
+        <!-- Move task to diff project -->
+        <div class="row padding2 fade" ng-class="{displaynone: activeProject.category=='education' || activeProject.category=='FAQ'}" ng-show="showTransferWindow">
+            <div class="col" style="align:center; width: 100%">
+              <ion-list>
+              <pre class="greyvisible">Move note to another folder</pre>
+              <ion-item ng-repeat="project in projects" class="item" style="border-style:none; margin:5px 7px 0px 7px; padding: 5px 0px 5px 0px; display:inline-block; background: transparent;" ng-click="newTaskParent(task,$index)" ng-if="project.category != 'FAQ' && project.category != 'education'">
+                <span ng-class="{bold: taskParent==$index}" style="border-style:none; padding: 5px 5px 5px 5px; border-radius:5px; width: 100px; max-width:400px; background:#e6e6e6">{{project.title}}</span>
+              </ion-item>
+              </ion-list>  
+            </div>          
+        </div>
+        <!-- Topic, description, title url -->
+        <div class="padding padding2">
+          <div style="margin-top: 10px">
+            <div>
+                <textarea id="taskTitle" overflow-scroll="true" msd-elastic="\n" rows="1" ng-model="task.title" placeholder="{{placeholder}}" ng-blur=updateTaskAuto(task) ng-paste="previewTaggedData()"></textarea>
+            </div>
+            <div ng-if="showClipboard" style="text-align: right">
+              <button class="button-clear positive" style="font-size: 16px" ng-click="pasteValue(clipboardValue)">Paste</button>
+            </div>
+          </div>
+
+          <div>      
+            <div ng-if="task.topic" style="text-align: left !important; margin-top: 15px;">
+              <div><b>{{task.topic}}</b></div>
+              <div ng-if="task.description" ng-bind-html="task.description | renderHTMLCorrectly" style="margin-top: 25px"></div>
+            </div>
+          </div> 
+
+        </div>
+
+        <div ng-repeat="url in urlList" style="border-style:none; margin-right:15px; margin-top: 15px; margin-bottom: 15px; padding:0px; display:inline-block">
+          <a ng-href="{{url.clickableLink}}" onclick="window.open(this.href, '_blank', 'location=yes'); return false;" style="border-style:none; text-decoration:none; color:#000000; padding:5px; border-radius:5px; width: 100px; max-width:400px; background:#e6e6e6;"> <i class="ion-earth"></i> {{url.baseURL}}</a>
+        </div> 
+        <div ng-repeat="address in gpsAddressList" style="border-style:none; margin-right:15px; margin-top: 15px; margin-bottom: 15px; padding:0px; display:inline-block">
+          <a ng-href="{{address.gpsLink}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;" style="border-style:none; text-decoration:none; color:#000000; padding:5px; border-radius:5px; width: 100px; max-width:400px; background:#e6e6e6;"> <i class="ion-ios-location-outline"></i> Open map</a>
+        </div>
+
+        <!-- Date and price -->
+        <div style="margin: 15px 0px 15px 0px" ng-show="task.dueDate">
+          <span style="color: #a8a8a8">{{task.dueDate}} {{task.dueTime}}</span>
+          <span ng-show="task.dueDate" class="assertive ion-ios-close-outline" style="font-size: 24px;" ng-click="removeDateTime(task)"></span> 
+        </div>
+        <div class="row" style="width:100%; text-align: center; margin-top: 10px" ng-show="activeProject.category=='subtotal'">
+          <span class="col-25 col-center">Quantity</span>
+          <span class="col-25 col-center"><input class="totaltransparent" type="number" ng-model="task.unit" placeholder="No of unit" ng-blur="updateTaskAuto(task)"></span>
+          <span class="col-25 col-center">$</span>
+          <span class="col-25 col-center"><input class="totaltransparent" type="number" ng-model="task.pricePerUnit" placeholder="Price/Unit" ng-blur="updateTaskAuto(task)"></span>
+        </div>
+        <input type="hidden" ng-model="task.dueDate" style="margin-top: 10px" placeholder="No date" readonly />
+        <input type="hidden" ng-model="task.dueTime" style="margin-top: 10px" placeholder="No time" readonly />
+    </div>
+
+  <!-- Images section -->
+    <div class="row" ng-repeat="taskimage in task.images" ng-if="$index % 4 === 0">
+        <div class="col col-25" ng-if="$index < task.images.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + task.images[$index + 0].imgURI : task.images[$index + 0].imgURI}}" width="100%" ng-click="showPopupImage($index + 0,'editTaskModal')" />
+        </div>
+        <div class="col col-25" ng-if="$index + 1 < task.images.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + task.images[$index + 1].imgURI : task.images[$index + 1].imgURI}}" width="100%" ng-click="showPopupImage($index + 1,'editTaskModal')" />
+        </div>
+        <div class="col col-25" ng-if="$index + 2 < task.images.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + task.images[$index + 2].imgURI : task.images[$index + 2].imgURI}}" width="100%" ng-click="showPopupImage($index + 2,'editTaskModal')" />
+        </div>
+        <div class="col col-25" ng-if="$index + 3 < task.images.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + task.images[$index + 3].imgURI : task.images[$index + 3].imgURI}}" width="100%" ng-click="showPopupImage($index + 3,'editTaskModal')" />
+        </div>
+    </div>
+      
+  <div style="height:100px"></div>
+  </ion-content>
+</div>

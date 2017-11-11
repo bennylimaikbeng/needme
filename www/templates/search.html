@@ -1,0 +1,22 @@
+      
+
+<div class="modal animated bounceInLeft">
+    <ion-header-bar class="bar-positive">
+      <i class="button button-clear white icon ion-chevron-left" ng-click="closeSearch()"></i>
+      <h1 class="title">Search</h1>
+    </ion-header-bar>           
+        
+    <ion-content scroll="true" has-bouncing="true" style="background: url(img/{{themeString}}.png);background-size: contain; position: fixed; bottom: 0px; background-repeat: no-repeat; background-position:center bottom;" ng-swipe-right="closeSearch()">
+    <div class="padding">
+      <input type="text" ng-model="searchText" placeholder="Search folder or notes" class="textinput">
+    </div>
+    <ion-list>
+      <ion-item class="item item-text-wrap slighttransparent" ng-repeat="result in allTasks | filter : searchText | orderBy:'taskId':true | limitTo : '10'" ng-click="jumpToEditTask(result.taskId, referrer, result.projectIndex)">
+        <span><b>{{result.projectTitle}}</b></span>
+        <span>{{result.taskTopic}}<br></span>
+        <!-- <span ng-bind-html="result.taskDescription | renderHTMLCorrectly"></span> -->
+        <span ng-class="{personalnote: result.taskTopic}">{{result.taskTitle}}</span>
+      </ion-item>  
+    <ion-list>
+    </ion-content>
+</ion-list>

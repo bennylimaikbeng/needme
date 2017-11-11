@@ -1,0 +1,132 @@
+<div class="modal">
+    <ion-header-bar class="bar-positive">
+      <i class="button button-clear white icon ion-chevron-left" ng-click="closeEditSetting()"></i>
+      <h1 class="title">Settings</h1>
+      <!-- <button class="button button-clear button-positive" ng-click="closeEditSetting()">Back</button> -->
+    </ion-header-bar>           
+        
+    <ion-content scroll="true" has-bouncing="false">
+
+        <ion-item>
+          <div class="row">
+            <div class="col-90 col-center positive">
+              Show reminders of future days
+              <pre class="greyvisible" style="font-size: 90%">Drag slider to set number of days</pre>
+            </div>
+            <div class="col-10 col-center">
+              <div style="border-style: solid; border-width: 1px; text-align: center; padding: 5px; border-radius: 5px; color: white; background-color: #ff0084"><b>{{upcomingFilter}}</b></div>
+            </div>
+          </div>
+          <div class="range">
+            <input type="range" ng-model="upcomingFilter" ng-change="refreshUpcomingList(upcomingFilter)" min="1" max="30" style="margin:0px; padding: 0px; background: linear-gradient(to right, #ff0084 0%, #fff 100%);  background-size: 99% 2px; background-repeat: no-repeat; background-position: center;">
+          </div>
+        </ion-item>    
+
+        <ion-item>
+          <div class="row">
+            <div class="col-90 col-center positive">
+              Show completed of past days
+              <pre class="greyvisible" style="font-size: 90%">Drag slider to set number of days</pre>
+            </div>
+            <div class="col-10 col-center">
+              <div style="border-style: solid; border-width: 1px; text-align: center; padding: 5px; border-radius: 5px; color: white; background-color: #ff0084"><b>{{dateFilter}}</b></div>
+            </div>
+          </div>
+          <div class="range">
+            <input type="range" ng-model="dateFilter" ng-change="refreshAccomplistmentList(dateFilter)" min="1" max="30" style="margin:0px; padding: 0px; background: linear-gradient(to right, #ff0084 0%, #fff 100%); background-size: 99% 2px; background-repeat: no-repeat; background-position: center;">
+          </div>
+        </ion-item>
+
+      <ion-item>
+        <div class="row">
+          <div class="col-90 col-center positive">
+            Slot new note on top
+            <pre class="greyvisible" style="font-size: 90%">New note will be slotted on top of list</pre>
+          </div>
+          <div class="col-10 col-center" style="text-align: center">
+              <button class="button-clear ion-android-checkmark-circle greyout" style="font-size: 30px" ng-class="{tickcomplete: newitemistop == 'true'}" ng-click="toggleNewItemIsTop()"></button>
+          </div>
+        </div>
+      </ion-item>
+      <ion-item ng-if="currentPlatform == 'android'">
+          <div class="row">
+            <div class="col-90 col-center positive">
+              Next reminder on status bar
+              <pre class="greyvisible" style="font-size: 90%">Next upcoming reminder displayed on status bar</pre>
+            </div>
+            <div class="col-10 col-center" style="text-align: center">
+                <button class="button-clear ion-android-checkmark-circle greyout" style="font-size: 30px" ng-class="{tickcomplete: enablebackground == 'true'}" ng-click="toggleEnableBackground()"></button>
+            </div>
+          </div>
+        </ion-item>
+
+      <ion-item>
+          <div class="row">
+            <div class="col-90 col-center positive">
+              Backup
+              <pre class="greyvisible" style="font-size: 90%">Backup data locally</pre>
+            </div>
+            <div class="col-10 col-center" style="text-align: center">
+                <button class="button-clear ion-archive greyout" style="font-size:30px;" ng-click="createJsonBackup()"></button>
+            </div>
+          </div>
+      </ion-item>
+
+      <ion-item>
+          <div class="row">
+            <div class="col-90 col-center positive">
+              Restore
+              <pre class="greyvisible" style="font-size: 90%">Restore previous backup</pre>
+            </div>
+            <div class="col-10 col-center" style="text-align: center">
+                <button class="button-clear ion-refresh greyout" style="font-size:30px;" ng-click="restoreJsonBackup()"></button>
+            </div>
+          </div>
+      </ion-item>
+
+      <ion-list>
+<!--         <ion-item class="item item-text-wrap">
+          <ion-toggle toggle-class="toggle-balanced" ng-model="newitemistop" ng-true-value="'true'" ng-false-value="'false'" ng-change="toggleNewItemIsTop()">Slot new item on top</ion-toggle>
+        </ion-item>
+        <ion-item class="item item-text-wrap">
+          <ion-toggle ng-class="{displaynone: currentPlatform == 'ios'}" toggle-class="toggle-balanced" ng-model="enablebackground" ng-true-value="'true'" ng-false-value="'false'" ng-change="toggleEnableBackground()">Enable background mode</ion-toggle>
+        </ion-item>   -->
+<!--         <ion-item>
+          <div class="item item-text-wrap" style="text-align:center; margin-bottom:15px">Show completed of past {{dateFilter}} day(s)</div>
+          <div class="range">
+            <input type="range" ng-model="dateFilter" ng-change="refreshAccomplistmentList(dateFilter)" min="1" max="30">
+          </div>         
+        </ion-item>    
+        <ion-item>
+          <div class="item item-text-wrap" style="text-align:center; margin-bottom:15px">Show reminders of future {{upcomingFilter}} day(s)</div>  
+          <div class="range">
+            <input type="range" ng-model="upcomingFilter" ng-change="refreshUpcomingList(upcomingFilter)" min="1" max="30">
+          </div>   
+        </ion-item>    -->   
+<!--         <ion-item class="item">
+          <div class="row">
+          <span class="col-80 col-center">Backup</span>
+          <i class="col-20 col-center button button-clear button-positive ion-archive" style="font-size:35px" ng-click="createJsonBackup()"></i>
+          </div>
+        </ion-item>     
+        <ion-item class="item">
+          <div class="row">
+          <span class="col-80 col-center">Restore</span>
+          <i class="col-20 col-center button button-clear button-positive ion-refresh" style="font-size:35px" ng-click="restoreJsonBackup()"></i>
+          </div>
+        </ion-item>   -->            
+<!--         <ion-item>
+          <i class="button button-clear ion-refresh icon" ng-click="createProjectTemplate()"></i>Refresh Project Template
+        </ion-item>          
+        <ion-item>
+          <i class="button button-clear ion-refresh icon" ng-click="myPedometerUpdates()"></i>Pedometer: {{numberOfSteps}} <br>{{daysDiff}} <br> {{avgStepsPerDay}}
+        </ion-item>   
+        <ion-item>
+          <i class="button button-clear ion-refresh icon" ng-click="myPedometerStop()"></i>Pedometer Stop
+        </ion-item>         
+        <ion-item>
+          <i class="button button-clear ion-calendar icon" ng-click="convertLocaleToISO()"></i>Fix Locale to ISO
+        </ion-item>   --> 
+      </ion-list>    
+    </ion-content>
+</div>

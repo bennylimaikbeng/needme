@@ -1,28 +1,88 @@
 
 
-  <div class="modal">
-
+<div class="modal">
     <!-- Modal header bar -->
-    <ion-header-bar class="bar-secondary">
-      <h1 class="title">New Task</h1>
-      <button class="button button-clear button-positive" ng-click="closeNewTask()">Cancel</button>
+    <ion-header-bar class="bar-positive">
+      <button id="createtask" class="button button-clear white icon ion-chevron-left" ng-click="createTask(task)"><span ng-if="task.title">Save</span></button>
+      <h1 class="title">New Note</h1>
+      <button class="button button-clear white" ng-click="closeNewTask()">Cancel</button>
     </ion-header-bar>
 
     <!-- Modal content area -->
-    <ion-content>
+    <ion-content has-bouncing="false" ng-swipe-right="createTask(task)">
+      <div class="row light blueback" style="text-align: center">
+            <span class="col">
+              <i class="clear ion-calendar icon" style="display:block; font-size: 25px" ng-click="openDatePicker()"></i>
+            </span>
+            <span class="col">
+              <i class="clear ion-clock icon" style="display:block; font-size: 25px" ng-click="openTimePicker()"></i>
+            </span>         
+            <span class="col">
+              <i class="clear ion-image icon" style="display:block; font-size: 25px" ng-click="openPhotoLibrary2(task)"></i>
+            </span>
+            <span class="col">
+              <i class="clear ion-camera icon" style="display:block; font-size: 25px" ng-click="takePicture(task)"></i>
+            </span> 
+            <span class="col">
+              <i class="clear ion-ios-location icon" style="display:block; font-size: 25px" ng-click="getCurrentLocation()"></i>
+            </span>             
+      </div>
+      {{testReplace}}
+      <div class="padding2 slighttransparent" style="text-align: center;">
+          <div style="padding:0px" ng-class="{displaynone: activeProject.category != 'FAQ'}">
+            <textarea style="font-weight:bold" msd-elastic="\n" rows="1" ng-model="task.topic" placeholder="Add my title"></textarea>
+            <textarea msd-elastic="\n" rows="1" ng-model="task.description" placeholder="Add my description"></textarea>
+          </div>  
+          <div>    
+            <textarea id="taskTitle" msd-elastic="\n" rows="1" ng-model="task.title" placeholder="{{placeholder}}" ng-blur="previewTaggedData()" ng-paste="previewTaggedData()"></textarea>
+          </div>
 
-      <form ng-submit="createTask(task)">
-        <div class="list">
-          <label class="item item-input">
-            <input type="text" placeholder="What do you need to do?" ng-model="task.title">
-          </label>
+          <div ng-if="showClipboard" style="text-align: right">
+            <button class="button-clear positive" style="font-size: 16px" ng-click="pasteValue(clipboardValue)">Paste</button>
+          </div>
+
+          <div ng-if="task.dueDate" style="text-align:center; margin-top:10px">
+            <span style="color: #a8a8a8;">{{task.dueDate}} {{task.dueTime}}</span>
+            <span ng-show="task.dueDate" class="assertive ion-ios-close-outline" style="font-size: 120%;" ng-click="removeDateTime(task)"></span>
+          </div>
+          <div class="row" style="width:100%; text-align: center; margin-top: 10px; font-size: 14px" ng-show="activeProject.category == 'subtotal'">
+            <span class="col-25 col-center">Quantity</span>
+            <span class="col-25 col-center"><input class="totaltransparent" type="number" ng-model="task.unit" placeholder="No of unit"></span>
+            <span class="col-25 col-center">$</span>
+            <span class="col-25 col-center"><input class="totaltransparent" type="number" ng-model="task.pricePerUnit" placeholder="Price/Unit"></span>
+          </div>
+
+          <div ng-repeat="url in urlList" style="border-style:none; margin-right:15px; margin-top: 15px; margin-bottom: 15px; padding:0px; display:inline-block">
+            <a ng-href="{{url.clickableLink}}" onclick="window.open(this.href, '_blank', 'location=yes'); return false;" style="border-style:none; text-decoration:none; color:#000000; padding:5px; border-radius:5px; width: 100px; max-width:400px; background:#e6e6e6;"> <i class="ion-earth"></i> {{url.baseURL}}</a>
+          </div> 
+          <div ng-repeat="address in gpsAddressList" style="border-style:none; margin-right:15px; margin-top: 15px; margin-bottom: 15px; padding:0px; display:inline-block">
+            <a ng-href="{{address.gpsLink}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;" style="border-style:none; text-decoration:none; color:#000000; padding:5px; border-radius:5px; width: 100px; max-width:400px; background:#e6e6e6;"> <i class="ion-ios-location-outline"></i> Open map</a>
+          </div>
+
+      </div>
+
+      <div>
+        <input type="hidden" ng-model="task.dueDate" style="margin-top: 10px" placeholder="No date" />
+        <input type="hidden" ng-model="task.dueTime" style="margin-top: 10px" placeholder="No time" />
+      </div>
+
+  <!-- Images section -->
+    <div class="row" ng-repeat="taskimage in tempimages" ng-if="$index % 4 === 0">
+        <div class="col col-25" ng-if="$index < tempimages.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + tempimages[$index + 0].imageURI : tempimages[$index + 0].imageURI}}" width="100%" ng-click="showPopupTempImage($index + 0,'taskModal')" />
         </div>
-        <div class="padding">
-          <button type="submit" class="button button-block button-positive">Create Task</button>
+        <div class="col col-25" ng-if="$index + 1 < tempimages.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + tempimages[$index + 1].imageURI : tempimages[$index + 1].imageURI}}" width="100%" ng-click="showPopupTempImage($index + 1,'taskModal')" />
         </div>
-      </form>
+        <div class="col col-25" ng-if="$index + 2 < tempimages.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + tempimages[$index + 2].imageURI : tempimages[$index + 2].imageURI}}" width="100%" ng-click="showPopupTempImage($index + 2,'taskModal')" />
+        </div>
+        <div class="col col-25" ng-if="$index + 3 < tempimages.length">
+            <img class="smallsquarecropimage" ng-src="{{currentPlatform == 'ios' ? uuidPath + tempimages[$index + 3].imageURI : tempimages[$index + 3].imageURI}}" width="100%" ng-click="showPopupTempImage($index + 3,'taskModal')" />
+        </div>
+    </div>
 
     </ion-content>
-
-  </div>
+    
+</div>
   

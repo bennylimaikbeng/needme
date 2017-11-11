@@ -1,4 +1,487 @@
 /* Empty. Add your own CSS if you like */
+pre {
+  font-family: sans-serif;
+  vertical-align: text-bottom;
+}
+
+input[readonly]:not(.cloned-text-input)
+{
+  background-color:#ffffff;
+}
+
+#myCanvas { background-color: rgba(158, 167, 184, 0.2); }
+
+textarea {
+  /*width: 90%;*/
+  margin: 15px 0px 0px 0px;
+  border-color:#dadada;
+  resize: none;
+  max-height: 250px;
+  font-size: 17px;
+  padding: 0px;
+  overflow: auto !important;
+}
+
+u {
+  color: red;
+}
+
+em {
+  font-style: italic;
+}
+
+h2 {
+  font-size: 17px
+  /*because of month title*/
+}
+
+.fc-center, .fc-left, .fc-right {
+  padding-top: 12px;
+}
+
+.fc-left, .fc-right {
+  padding: 4px;
+}
+
+textarea[readonly]:not(.cloned-text-input)
+{
+    background-color: #ffffff;
+    padding:16px;
+}
+
+.tab-item-active{
+  background-color: #2b579a;
+
+}
+
+.fc-event {
+  /*height: 30px;*/
+  padding: 10px 2px 10px 2px !important;
+}
+
+.fade.ng-hide {
+  opacity: 0;
+}
+
+.fade.ng-hide-remove,
+.fade.ng-hide-add {
+  display: block !important;
+}
+
+.fade.ng-hide-remove {
+  transition: all linear 300ms;
+}
+
+.fade.ng-hide-add {
+  transition: all linear 300ms;
+}
+
+.textinput {
+  font-size: 17px !important;
+}
+
+.button-icon {
+  font-size: 20px;
+}
+
+.item {
+  font-size: 14px;
+}
+
+.title {
+  font-size: 14px !important;
+}
+
+.bar {
+  background-size: 0px;
+  border-style: none;
+}
+
+.modal-backdrop {
+  -webkit-transition: background-color 20ms linear;
+  transition: background-color 20ms linear;
+}
+
+.modal-backdrop.active {
+  background-color: rgba(255, 255, 255, 1);   
+}
+
+@media (min-width: 680px) {
+  .modal {
+    top: 0%;
+    right: 0%;
+    bottom: 0%;
+    left: 0%;
+    overflow: visible;
+    min-height: 240px;
+    width: 100%; }
+}
+
+.slighttransparent {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.totaltransparent {
+  background: rgba(255, 255, 255, 0);
+}
+
+/*.has-footer { 
+  height: auto; 
+}*/
+
+.insetprojecttask, .cardmenuproject {
+  /*font-size: 15px;*/
+}
+
+/*.insetprojecttask:nth-child(even) { background: #f4f4f4; }*/
+
 .complete {
   text-decoration: line-through;
+  color:#aaaaaa;
+}
+
+.displaynone {
+  display: none !important;
+}
+
+.white {
+  color: #ffffff;
+}
+
+.noAudio {
+  display: none;
+}
+
+.tickcomplete {
+  color: #00ff00 !important;
+}
+
+.greyout {
+  color:#dadada;
+}
+
+.bold {
+  font-weight: bold !important;
+  background: #33cd5f !important;
+  color: #ffffff !important;
+}
+
+.greyvisible {
+  color:#aaaaaa;
+}
+
+.blueback {
+  background-color: #387ef5;
+}
+
+.personalnote {
+  color: red;
+  font-style: italic;
+}
+
+.card {
+  margin: 0px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+
+.padding {
+  text-align: center;
+}
+
+.padding2 {
+  font-size: 16px;
+  padding: 16px;
+  border-style: solid;
+  border-bottom-width: 1px;
+  border-color: #ddd;
+}
+ 
+.transparent {
+  background: rgba(0,0,0,0.7);
+}
+
+.img-wrap {
+    position: relative;
+}
+
+.img-operation {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    z-index: 100;
+    /*background: rgba(0,0,0,0.7);*/
+    /*color: #fff;*/
+}
+
+.col85 {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 8515%;
+  -moz-box-flex: 0;
+  -moz-flex: 0 0 8515%;
+  -ms-flex: 0 0 8515%;
+  flex: 0 0 8515%;
+  max-width: 8515%; }
+
+.col80 {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 80%;
+  -moz-box-flex: 0;
+  -moz-flex: 0 0 80%;
+  -ms-flex: 0 0 80%;
+  flex: 0 0 80%;
+  max-width: 80%; }
+
+.col60 {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 60%;
+  -moz-box-flex: 0;
+  -moz-flex: 0 0 60%;
+  -ms-flex: 0 0 60%;
+  flex: 0 0 60%;
+  max-width: 60%; }   
+
+.col20 {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 20%;
+  -moz-box-flex: 0;
+  -moz-flex: 0 0 20%;
+  -ms-flex: 0 0 20%;
+  flex: 0 0 20%;
+  max-width: 20%; }  
+
+.col15 {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 15%;
+  -moz-box-flex: 0;
+  -moz-flex: 0 0 15%;
+  -ms-flex: 0 0 15%;
+  flex: 0 0 15%;
+  max-width: 15%; }   
+
+.truncate {
+  /*width: 50px;*/
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} 
+
+.lineclamp {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+}
+
+@media (min-width: 680px) {
+  .modal {
+    overflow: hidden;
+  } 
+}
+
+/* Empty. Add your own CSS if you like */
+.float-button {
+  background-color: grey;
+  opacity: 1.0;
+  color: white;
+  border-radius: 50%;
+  /*border-radius:15% 0 0 0;*/
+  width: 30px;
+  padding: 25px;
+  font-size: 40px;
+  position: fixed;
+  top: 2%; /* Adjust height */
+  right: 2%; /* Adjust position */
+  z-index: 1000;
+}
+ 
+.float-button .content {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  margin-top: -24px;
+  color: white;
+}
+
+.float-menu-button {
+  background-color:#387ef5;
+  opacity: 1.0;
+  color: white;
+  border-radius: 50%;
+  /*border-radius:15% 0 0 0;*/
+  width: 30px;
+  padding: 25px;
+  font-size: 40px;
+  position: fixed;
+  top: 2%; /* Adjust height */
+  left: 2%; /* Adjust position */
+  z-index: 1000;
+}
+
+.float-menu-button .content {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  margin-top: -24px;
+  color: white;
+}
+
+.float-prev-button {
+  color: grey;
+  position: fixed;
+  top: 50%; /* Adjust height */
+  left: 1%; /* Adjust position */
+  z-index: 1000;
+}
+
+.float-next-button {
+  color: grey;
+  position: fixed;
+  top: 50%; /* Adjust height */
+  right: 1%; /* Adjust position */
+  z-index: 1000;
+}
+
+.share-image {
+   position: absolute;
+   top: 10px;
+   left: 10px;
+   padding: 5px;
+   /*border: 1px solid white;*/
+   border: none;
+   border-radius: 50%;
+   background-color:#387ef5;
+   color: white;
+}
+
+.checkbox input:checked:before, .checkbox input:checked + .checkbox-icon:before {
+  background: #33cd5f;
+  border-color: #33cd5f;
+}
+
+.squarecropimage {
+  width: 100% !important;
+  height: auto;
+  min-height: 380px;
+  max-height: 380px;
+  object-fit: cover;  
+  overflow: hidden;
+  /*border-radius: 50%;*/
+} 
+
+.smallsquarecropimage {
+  width: 100% !important;
+  height: auto;
+  min-height: 300px;
+  max-height: 300px;
+  object-fit: cover;  
+  overflow: hidden;
+}
+
+.popupimage {
+    width: 100%;
+    height: 1024px;
+    /*top: 100px;*/
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+@media screen and (max-height: 1280px) {
+  .popupimage {
+    min-height: 1025px;
+    max-height: 1152px;
+  }
+}
+
+@media screen and (max-height: 1024px) {
+  .popupimage {
+    min-height: 921px;
+    max-height: 921px;
+  }
+} 
+
+@media screen and (max-height: 760px) {
+  .popupimage {
+    min-height: 681px;
+    max-height: 684px;
+  }
+} 
+
+@media screen and (max-height: 680px) {
+  .popupimage {
+    min-height: 581px;
+    max-height: 612px;
+  }
+} 
+
+@media screen and (max-height: 580px) {
+  .popupimage {
+    min-height: 540px;
+    max-height: 560px;
+  }
+} 
+
+@media screen and (max-width: 840px) {
+  .smallsquarecropimage {
+    min-height: 180px;
+    max-height: 180px;
+  }
+} 
+
+@media screen and (max-width: 420px) {
+  .smallsquarecropimage {
+    min-height: 90px;
+    max-height: 90px;
+  }
+} 
+
+@media screen and (max-width: 380px) {
+/*  .squarecropimage {
+    min-height: 340px;
+    max-height: 340px;
+  }*/
+
+  .smallsquarecropimage {
+    min-height: 80px;
+    max-height: 80px;
+  }
+} 
+
+@media screen and (max-width: 320px) {
+/*  .squarecropimage {
+    min-height: 280px;
+    max-height: 280px;
+  } */
+  .smallsquarecropimage {
+    min-height: 67px;
+    max-height: 67px;
+  }
+} 
+
+.fullwidthimage {
+  width: 100% !important;
+  height: auto;
+  min-height: 0px;
+  max-height: none;
+  object-fit: fill; 
+} 
+
+.home-container {
+     display: -webkit-flex;
+     -webkit-flex-direction: column;
+     height: 100%;
+}
+.home-container > .row {
+     -webkit-flex: 1;
+     padding: 20px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
